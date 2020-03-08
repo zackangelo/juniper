@@ -303,6 +303,11 @@ where
         }
     }
 
+    /// Returns the children for this selection
+    pub fn children(&self) -> Vec<&LookAheadSelection<'a, S>> {
+        self.children.iter().map(|c| &c.inner).collect()
+    }
+
     /// Convert a eventually type independent selection into one for a concrete type
     pub fn for_explicit_type(&self, type_name: &str) -> ConcreteLookAheadSelection<'a, S> {
         ConcreteLookAheadSelection {
@@ -338,6 +343,12 @@ pub trait LookAheadMethods<S> {
     /// Get the name of the field represented by the current selection
     fn field_name(&self) -> &str;
 
+    /// ZA: Not sure what to call this but need access to it
+    fn name(&self) -> &str;
+
+    /// Get the alias of the field represented by the current selection
+    fn alias(&self) -> Option<&str>;
+
     /// Get the the child selection for a given field
     fn select_child(&self, name: &str) -> Option<&Self>;
 
@@ -369,6 +380,14 @@ impl<'a, S> LookAheadMethods<S> for ConcreteLookAheadSelection<'a, S> {
         self.alias.unwrap_or(self.name)
     }
 
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn alias(&self) -> Option<&str> {
+        self.alias
+    }
+
     fn select_child(&self, name: &str) -> Option<&Self> {
         self.children.iter().find(|c| c.name == name)
     }
@@ -396,6 +415,14 @@ impl<'a, S> LookAheadMethods<S> for ConcreteLookAheadSelection<'a, S> {
 impl<'a, S> LookAheadMethods<S> for LookAheadSelection<'a, S> {
     fn field_name(&self) -> &str {
         self.alias.unwrap_or(self.name)
+    }
+
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn alias(&self) -> Option<&str> {
+        self.alias
     }
 
     fn select_child(&self, name: &str) -> Option<&Self> {
