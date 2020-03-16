@@ -519,6 +519,14 @@ where
         self.schema
     }
 
+    /// The currently executing field name or alias
+    pub fn current_selection(&self) -> &str {
+        match self.field_path {
+            FieldPath::Root(_) => unreachable!(),
+            FieldPath::Field(field, _, _) => field,
+        }
+    }
+
     #[doc(hidden)]
     pub fn current_type(&self) -> &TypeType<'a, S> {
         &self.current_type
