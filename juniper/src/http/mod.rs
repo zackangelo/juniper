@@ -44,7 +44,13 @@ where
         self.operation_name.as_ref().map(|oper_name| &**oper_name)
     }
 
-    fn variables(&self) -> Variables<S> {
+    /// Returns the `query` associated with this request
+    pub fn query(&self) -> &str {
+        &self.query
+    }
+
+    /// Returns the variables associated with this request
+    pub fn variables(&self) -> Variables<S> {
         self.variables
             .as_ref()
             .and_then(|iv| {
