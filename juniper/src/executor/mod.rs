@@ -457,6 +457,21 @@ where
     }
 
     #[doc(hidden)]
+    pub fn replaced_type<'b>(&'b self, type_name: &'b str) -> Executor<'b, CtxT, S> {
+        Executor {
+            fragments: self.fragments,
+            variables: self.variables,
+            current_selection_set: self.current_selection_set,
+            parent_selection_set: self.parent_selection_set,
+            current_type: self.schema.type_by_name(type_name).expect("Type not found"),
+            schema: self.schema,
+            context: self.context,
+            errors: self.errors,
+            field_path: self.field_path.clone(),
+        }
+    }
+
+    #[doc(hidden)]
     pub fn field_sub_executor(
         &self,
         field_alias: &'a str,
